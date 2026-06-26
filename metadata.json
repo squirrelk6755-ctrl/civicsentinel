@@ -1,0 +1,6 @@
+{
+  "name": "CivicSentinel",
+  "description": "AI-Powered Community Consensus Platform transforming infrastructure conflicts into collaborative civic decisions through AI-powered mediation, multilingual communication, and community trust-building.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

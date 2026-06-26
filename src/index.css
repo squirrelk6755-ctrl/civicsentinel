@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Lora", Georgia, serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Overriding standard Tailwind slate palette to magically invert the app from cyberpunk dark into a gorgeous, high-end warm Editorial Light paper look */
+  --color-slate-950: #FAF8F5; /* Premium textured high-end rag paper */
+  --color-slate-900: #F4F0E6; /* Secondary card paper background */
+  --color-slate-800: #E8E2D2; /* Hairline borders & rule marks */
+  --color-slate-700: #DCD4C0; /* Accent borders / subtle lines */
+  --color-slate-600: #88806F; /* Editorial medium caption ink */
+  --color-slate-500: #6D685E; /* Secondary paragraph ink */
+  --color-slate-400: #4B463B; /* Regular body text / description ink */
+  --color-slate-300: #2F2C25; /* Strong high-contrast body labels */
+  --color-slate-200: #1E1B17; /* Lead sub-headers */
+  --color-slate-100: #100C08; /* Editorial deep ink-black headings */
+
+  /* Burgundy/Crimson academic print colors */
+  --color-indigo-950: #FAF7F2;
+  --color-indigo-900: #ECE5D7;
+  --color-indigo-850: #DFD7C7;
+  --color-indigo-700: #A23A48;
+  --color-indigo-650: #8F2B39;
+  --color-indigo-600: #7E1E2C; /* Primary Editorial Crimson */
+  --color-indigo-550: #6F1522;
+  --color-indigo-400: #570F1A;
+  --color-indigo-300: #3E050D;
+  --color-indigo-200: #2C0006;
+
+  /* Dark Slate Green (Sage) */
+  --color-emerald-950: #F3F6F2;
+  --color-emerald-900: #E4ECE3;
+  --color-emerald-500: #3F5E48; /* Editorial Moss Accent */
+  --color-emerald-400: #2E4735;
+  --color-emerald-300: #1F3023;
+
+  /* Ink Blue */
+  --color-blue-950: #F2F5F8;
+  --color-blue-900: #E1E8EE;
+  --color-blue-500: #3A536F; /* Editorial Slate Blue Accent */
+  --color-blue-400: #293E55;
+  --color-blue-300: #1A2838;
+}
+
+@layer utilities {
+  /* Editorial Hairline / Card frames */
+  .glass-card {
+    background: #FAF9F5;
+    border: 1px solid #D6CEBE;
+    box-shadow: 0 4px 20px -2px rgba(16, 12, 8, 0.03), 0 1px 3px -1px rgba(16, 12, 8, 0.01);
+  }
+
+  .glass-card-light {
+    background: #FFFDF9;
+    border: 1px solid #E8E2D2;
+    box-shadow: 0 2px 10px 0 rgba(16, 12, 8, 0.02);
+  }
+
+  .glass-card-hover {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  .glass-card-hover:hover {
+    transform: translateY(-2px);
+    border-color: #7E1E2C; /* Crimson Border */
+    background: #FFFEFB;
+    box-shadow: 0 16px 36px -4px rgba(126, 30, 44, 0.06), 0 4px 12px -2px rgba(126, 30, 44, 0.02);
+  }
+
+  /* Custom typography glow (repurposed for a beautiful letterhead stamp emboss look) */
+  .glow-text {
+    text-shadow: 0.5px 0.5px 0px rgba(126, 30, 44, 0.15);
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+    background-color: #FAF8F5;
+  }
+}
+
+/* Background floating ash/fibers to keep user's requested animated particles in a highly aesthetic, organic editorial style */
+@keyframes floatUp {
+  0% {
+    transform: translateY(110vh) scale(0.6) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.18;
+  }
+  90% {
+    opacity: 0.18;
+  }
+  100% {
+    transform: translateY(-10vh) scale(1.1) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(126, 30, 44, 0.08) 0%, rgba(126, 30, 44, 0) 70%);
+  border-radius: 50%;
+  animation: floatUp 32s infinite linear;
+}
+
+.particle:nth-child(even) {
+  background: radial-gradient(circle, rgba(63, 94, 72, 0.08) 0%, rgba(63, 94, 72, 0) 70%);
+}
+
+/* ==========================================================================
+   EDITORIAL NORMALIZATIONS & PRINT STYLING
+   ========================================================================== */
+
+/* Typography Overrides to ensure high-end editorial clarity */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", Georgia, serif !important;
+  color: #100C08 !important;
+  font-weight: 700 !important;
+}
+
+strong {
+  font-family: inherit;
+  color: #100C08 !important;
+  font-weight: 600 !important;
+}
+
+/* Ensure form elements and inputs have rich readable dark text */
+input, select, textarea {
+  color: #100C08 !important;
+  background-color: #FFFDF9 !important;
+  border-color: #D6CEBE !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #88806F !important;
+  opacity: 0.8;
+}
+
+/* Normalize general white text elements to ink black on clean paper background */
+.text-white {
+  color: #100C08 !important;
+}
+
+/* Maintain light text on dark buttons, interactive badges, alert status points */
+button .text-white, 
+button.text-white,
+a.bg-indigo-600,
+a.bg-indigo-600 *,
+button.bg-indigo-600,
+button.bg-indigo-600 *,
+.bg-indigo-600,
+.bg-indigo-600 *,
+.bg-indigo-650,
+.bg-indigo-650 *,
+.bg-amber-500,
+.bg-amber-500 *,
+.bg-rose-500,
+.bg-rose-500 *,
+.bg-red-500,
+.bg-red-500 *,
+.bg-emerald-500,
+.bg-emerald-500 * {
+  color: #FAF8F5 !important;
+}
+
+/* Overriding the dark community telegram flyer to appear as an elegant physical letter-pressed news sheet */
+div.bg-\[\#11131e\] {
+  background-color: #FAF9F5 !important;
+  border: 1px solid #D6CEBE !important;
+}
+
+div.bg-\[\#11131e\] * {
+  color: #100C08 !important;
+}
+
+div.bg-\[\#11131e\] .text-indigo-150 {
+  color: #2F2C25 !important;
+}
+
+/* Sophisticated header borders */
+header {
+  border-bottom: 2px solid #852230 !important; /* Crimson hairline across header block */
+}
+
+/* Clean, crisp scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #D6CEBE;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #88806F;
+}
+
+/* ==========================================================================
+   AI VISION COMPUTER SCANNER EFFECT
+   ========================================================================== */
+@keyframes laserSweep {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+.laser-scanner-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #7E1E2C, #A23A48, #7E1E2C, transparent);
+  box-shadow: 0 0 8px #7E1E2C, 0 0 16px rgba(126, 30, 44, 0.5);
+  animation: laserSweep 3.5s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 20;
+}
+
+
+
+
